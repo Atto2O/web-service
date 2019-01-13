@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,12 +27,28 @@ public class User {
     protected Long id;
 
     @NotNull
-    protected String username;
+    protected String name;
 
     @NotNull
     protected String password;
 
-    protected boolean isPremium = false;
+    protected ArrayList<String> subscriptions;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public ArrayList<String> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(ArrayList<String> Subscriptions) {
+        this.subscriptions = Subscriptions;
+    }
 
     public Long getId() {
         return id;
@@ -39,14 +56,6 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
@@ -57,29 +66,21 @@ public class User {
         this.password = password;
     }
 
-    public boolean getIsPremium() {
-        return isPremium;
-    }
-
-    public void setIsPremium(boolean premium) {
-        this.isPremium = premium;
-    }
-
     @Override
     public String toString() {
         return new StringBuilder("User [")
                 .append(id).append(", ")
-                .append(username).append(", ")
+                .append(name).append(", ")
                 .append(password).append(", ")
-                .append(isPremium).append("]").toString();
+                .append(subscriptions).append("]").toString();
     }
 
     public JsonObject toJson() {
         return Json.createObjectBuilder()
                 .add("id", this.id)
-                .add("username", this.username)
+                .add("name", this.name)
                 .add("password", this.password)
-                .add("isPremium", String.valueOf(this.isPremium)
+                .add("subscriptions", String.valueOf(this.subscriptions)
                 )
                 .build();
     }

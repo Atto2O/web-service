@@ -53,8 +53,27 @@ public class UserResources {
     }
 
     @POST
-    public Response save(@Valid User user) {
-        this.users.create(user);
+    @Path("new")
+    public long save(@Valid User user) {
+        if(this.users.findByUsername(user.getName()).size()!=0){
+            return 0;
+        }else{
+            return this.users.create(user);
+        //return Response.ok().build();
+        }
+        
+    }
+    
+    @PUT
+    @Path("modify")
+    public Response modify(@Valid User user) {
+        //this.users.remove(user.getId());
+        
+        //this.users.create(user);
+        /*if(!this.users.findByUsername(user.getName()).isEmpty()){     
+            this.users.modify(user);
+        }*/
+        this.users.modify(user);
         return Response.ok().build();
     }
     

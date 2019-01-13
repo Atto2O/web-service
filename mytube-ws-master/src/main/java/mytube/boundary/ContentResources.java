@@ -37,6 +37,13 @@ public class ContentResources {
     @Context
     UriInfo uriInfo;
 
+    
+    @GET
+    @Path("test")
+    public String test() {
+        return "Connected to Web Service";
+    }
+    
     @GET
     @Path("all")
     public JsonArray findAll() {

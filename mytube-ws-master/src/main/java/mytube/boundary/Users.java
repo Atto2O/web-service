@@ -22,16 +22,26 @@ public class Users {
         return this.em.find(User.class, id);
     }
 
-    public List<User> findByUsername(String username) {
-        Query query = this.em.createQuery("select u from User u where u.username = :username");
-        query.setParameter("username", username);
+    public List<User> findByUsername(String name) {
+        Query query = this.em.createQuery("select u from User u where u.name = :name");
+        query.setParameter("name", name);
         return query.getResultList();
     }
 
-    public void create(User user) {
+    public Long create(User user) {
         this.em.persist(user);
+        em.flush();
+        return user.getId();
     }
-
+    
+    public void modify(User user){
+        this.em.merge(user);
+        /*
+        System.out.println("\nHola dins del modify avans del update\n");
+        Query query = this.em.createQuery("update User u set u.name = 'pometa' where u.id = :id");//.executeUpdate();;//.refresh(user);
+        query.setParameter("id", user.getId());
+        query.executeUpdate();*/
+    }
     public void remove(Long id) {
         User user = findById(id);
         this.em.remove(user);
