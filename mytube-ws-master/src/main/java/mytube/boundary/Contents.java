@@ -6,6 +6,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import mytube.entity.Content;
+import mytube.entity.ServerInfo;
+import mytube.boundary.ContentsPack;
 
 /**
  *
@@ -30,17 +32,38 @@ public class Contents {
         return query.getResultList();
     }
 
+    /*
     public List<Content> findContentLike(String word) {
         Query query = this.em.createQuery("select c from Content c where c.description = :word");
         query.setParameter("word", word);
         //Fer que es consulti amb un like
         return query.getResultList();
+    }*/
+    
+    public List<Content> findContentLike(String word) {
+        Query query = this.em.createQuery("select c from Content c where "            
+                + "c.fileName LIKE :word  or "
+                + "c.user LIKE %:word% or "
+                + "c.description LIKE %:word% "
+        );//+ "c.tags LIKE :word ");
+        
+        query.setParameter("word", word);
+        return query.getResultList();
     }
     
-    public void create(Content content) {
+    public long create(Content content) {
         this.em.persist(content);
+        em.flush();
+        return content.getId();
     }
 
+    public void modify(Content content) {
+        //this.em.refresh(serverInfo);
+        //em.flush();
+        //return serverInfo.getId();
+        this.em.merge(content);
+    }
+    
     public void remove(Long id) {
         Content content = findById(id);
         this.em.remove(content);

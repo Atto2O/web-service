@@ -1,7 +1,11 @@
 package mytube.entity;
 
+import java.util.ArrayList;
 import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,13 +34,64 @@ public class Content {
     protected Long id;
 
     @NotNull
-    protected String fileId;
+    protected String fileName;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+    
+    @NotNull
+    protected Long serverID;
     
     @NotNull
     protected String description;
 
     @NotNull
-    protected String location;
+    protected String user;
+
+    public Long getServerID() {
+        return serverID;
+    }
+
+    public void setServerID(Long serverID) {
+        this.serverID = serverID;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public Boolean getState() {
+        return state;
+    }
+
+    public void setState(Boolean state) {
+        this.state = state;
+    }
+
+    public ArrayList<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
+    }
+    
+    @NotNull
+    protected Boolean state;
+    
+    @NotNull
+    protected ArrayList<String> tags;
+    
+    
 
     public Long getId() {
         return id;
@@ -54,29 +109,48 @@ public class Content {
         this.description = description;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
+  
     
     @Override
     public String toString() {
         return new StringBuilder("Content [")
                 .append(id).append(", ")
-                .append(fileId).append(", ")
+                .append(fileName).append(", ")
+                .append(serverID).append(", ")
+                .append(user).append(", ")
                 .append(description).append(", ")
-                .append(location).append("]").toString();
+                .append(state).append(", ")
+                .append(tags).append("]").toString();
     }
 
     public JsonObject toJson() {
-        return Json.createObjectBuilder()
+        
+        JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
+        JsonArrayBuilder plnArrBld = Json.createArrayBuilder();
+        for( String s:this.tags){
+             plnArrBld.add(s);
+        }
+        
+        JsonArray arr = plnArrBld.build();
+        // the array got created, add it to the json as a child element
+        jsonBuilder.add("id", this.id);
+        jsonBuilder.add("fileName", this.fileName);
+        jsonBuilder.add("serverID", this.serverID);
+        jsonBuilder.add("user", this.user);
+        jsonBuilder.add("description", this.description);
+        jsonBuilder.add("state", this.state);
+        jsonBuilder.add("tags", arr);
+        return jsonBuilder.build();
+        
+        /*return Json.createObjectBuilder()
                 .add("id", this.id)
-                .add("fileId", this.fileId)
+                .add("fileName", this.fileName)
+                .add("serverID", this.serverID)
+                .add("user", this.user)
                 .add("description", this.description)
-                .add("location", this.location)
-                .build();
+                .add("state", this.state)
+                .add("tags", String.valueOf(this.tags)
+                )
+                .build();*/
     }
 }

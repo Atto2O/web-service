@@ -12,6 +12,9 @@ import javax.xml.bind.annotation.XmlTransient;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 
 @Entity
 @Table(name = "user_mytube")
@@ -76,12 +79,28 @@ public class User {
     }
 
     public JsonObject toJson() {
-        return Json.createObjectBuilder()
+        JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
+        JsonArrayBuilder plnArrBld = Json.createArrayBuilder();
+        for( String s:this.subscriptions){
+             plnArrBld.add(s);
+        }
+        
+        JsonArray arr = plnArrBld.build();
+        // the array got created, add it to the json as a child element
+        jsonBuilder.add("id", this.id);
+        jsonBuilder.add("name", this.name);
+        jsonBuilder.add("password", this.password);
+        jsonBuilder.add("subscriptions", arr);
+        
+        return jsonBuilder.build();
+        
+        
+       /*/ return Json.createObjectBuilder()
                 .add("id", this.id)
                 .add("name", this.name)
                 .add("password", this.password)
-                .add("subscriptions", String.valueOf(this.subscriptions)
+                .add("subscriptions", arr)
                 )
-                .build();
+                .build();*/
     }
 }

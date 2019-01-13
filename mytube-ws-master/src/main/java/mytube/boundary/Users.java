@@ -22,10 +22,15 @@ public class Users {
         return this.em.find(User.class, id);
     }
 
-    public List<User> findByUsername(String name) {
+    public User findByUsername(String name) {
         Query query = this.em.createQuery("select u from User u where u.name = :name");
         query.setParameter("name", name);
-        return query.getResultList();
+        if(query.getResultList().size()!=0){
+         return (User)query.getResultList().get(0);   
+        }else{
+            return null;
+        }
+        
     }
 
     public Long create(User user) {

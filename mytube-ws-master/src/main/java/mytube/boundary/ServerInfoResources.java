@@ -1,6 +1,8 @@
 package mytube.boundary;
 
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -42,8 +44,42 @@ public class ServerInfoResources {
                 .forEach(list::add);
         return list.build();
     }
-
-    @GET
+    
+    @POST
+    @Path("/byID")
+    public JsonArray findByServerInfoId( JsonObject id) {
+        JsonArrayBuilder list = Json.createArrayBuilder();
+        List<ServerInfo> all = new ArrayList<ServerInfo>();
+        
+        
+        ArrayList<Integer> list1 = new ArrayList<Integer>();     
+        JsonArray jsonArray = (JsonArray) id.get("list");
+        
+        if (jsonArray != null) { 
+           int len = jsonArray.size();
+           for (int i=0;i<len;i++){ 
+            list1.add(Integer.parseInt(jsonArray.get(i).toString()));
+           } 
+        }      
+        
+        for (Iterator<Integer> i = list1.iterator(); i.hasNext();) {
+            Integer item = i.next();
+            if(this.servers.findByServerInfoId(item).size()!=0){
+                ServerInfo obj = this.servers.findByServerInfoId(item).get(0);
+                all.add(obj);
+            }
+            
+            
+        }
+        all.stream()
+                .map(m -> m.toJson()
+                )
+                .forEach(list::add);
+        
+        return list.build();
+    }
+    
+    /*@GET
     @Path("/")
     public JsonArray findByServerInfoId(@QueryParam("id") Long id) {
         JsonArrayBuilder list = Json.createArrayBuilder();
@@ -53,7 +89,7 @@ public class ServerInfoResources {
                 )
                 .forEach(list::add);
         return list.build();
-    }
+    }*/
 
     @POST
     @Path("new")
@@ -66,7 +102,8 @@ public class ServerInfoResources {
     @Path("modify")
     public long modify(@Valid ServerInfo serverInfo) {
         if(this.servers.findByServerInfoId(serverInfo.getId()).size()==0){
-            return this.servers.create(serverInfo);
+            this.servers.modify(serverInfo);
+            return 1;
         }else{
         //this.servers.remove(serverInfo.getId());
          this.servers.modify(serverInfo);

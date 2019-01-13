@@ -25,7 +25,7 @@ public class ServerInfos {
         return this.em.find(ServerInfo.class, id);
     }
 
-    public List<ServerInfo> findByServerInfoId(Long id) {
+    public List<ServerInfo> findByServerInfoId(long id) {
         Query query = this.em.createQuery("select u from ServerInfo u where u.id = :id");
         query.setParameter("id", id);
         return query.getResultList();

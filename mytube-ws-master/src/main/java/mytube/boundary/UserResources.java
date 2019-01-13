@@ -41,21 +41,18 @@ public class UserResources {
     }
 
     @GET
-    @Path("/")
-    public JsonArray findByUsername(@QueryParam("username") String username) {
+    @Path("/name")
+    public JsonObject findByUsername(@QueryParam("name") String name) {
         JsonArrayBuilder list = Json.createArrayBuilder();
-        List<User> all = this.users.findByUsername(username);
-        all.stream()
-                .map(m -> m.toJson()
-                )
-                .forEach(list::add);
-        return list.build();
+        User all = this.users.findByUsername(name);
+       
+        return all.toJson();
     }
 
     @POST
     @Path("new")
     public long save(@Valid User user) {
-        if(this.users.findByUsername(user.getName()).size()!=0){
+        if(this.users.findByUsername(user.getName())!=null){
             return 0;
         }else{
             return this.users.create(user);

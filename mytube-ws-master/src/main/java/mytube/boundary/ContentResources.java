@@ -1,5 +1,6 @@
 package mytube.boundary;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -56,24 +57,19 @@ public class ContentResources {
         return list.build();
     }
 
+ 
     @GET
-    @Path("/")
-    public JsonArray findByLocation(@QueryParam("location") String location) {
-        JsonArrayBuilder list = Json.createArrayBuilder();
-        List<Content> all = this.contents.findByLocation(location);
-        all.stream()
-                .map(m -> m.toJson()
-                )
-                .forEach(list::add);
-        return list.build();
-    }
-    
-    @GET
-    @Path("/descriptionLike")
+    @Path("/like")
     public JsonArray findContentLike(@QueryParam("word") String word) {
         JsonArrayBuilder list = Json.createArrayBuilder();
-        List<Content> all = this.contents.findContentLike(word);
-        all.stream()
+        List<Content> dbbContent = this.contents.findContentLike(word);
+        List<ContentsPack> PackContent = new <ContentsPack>ArrayList();
+        
+        for (Content content : dbbContent) {
+		PackContent.add(new ContentsPack(content.getId(),content.getServerID()));
+	}
+        
+        PackContent.stream()
                 .map(m -> m.toJson()
                 )
                 .forEach(list::add);
@@ -81,14 +77,16 @@ public class ContentResources {
     }
 
     @POST
-    public Response save(@Valid Content content) {
-        this.contents.create(content);
-        return Response.ok().build();
+    @Path("new")
+    public long save(@Valid Content content) {
+        return this.contents.create(content);
+        //return Response.ok().build();
     }
     
     @PUT
+    @Path("modify")
     public Response modify(@Valid Content content) {
-        this.contents.create(content);
+        this.contents.modify(content);
         return Response.ok().build();
     }
     
