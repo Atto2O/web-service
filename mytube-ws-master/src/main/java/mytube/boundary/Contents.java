@@ -41,13 +41,28 @@ public class Contents {
     }*/
     
     public List<Content> findContentLike(String word) {
-        Query query = this.em.createQuery("select c from Content c where "            
-                + "c.fileName LIKE :word  or "
-                + "c.user LIKE %:word% or "
-                + "c.description LIKE %:word% "
-        );//+ "c.tags LIKE :word ");
         
-        query.setParameter("word", word);
+        
+
+        String[] keyWords = word.split("'., '");
+        String queryString="select c from Content c where";
+        //For each key word we check all the files
+        for (int i = 0; i < keyWords.length; i++) {
+            if(i==keyWords.length-1){
+                queryString +=             
+                "(c.fileName like \'"+keyWords[i]+"\' or "
+                + "c.user like \'"+keyWords[i]+"\' or "
+                + "c.description like \'"+keyWords[i]+"\' )";
+        
+            }else{
+                queryString +=             
+                "(c.fileName like \'"+keyWords[i]+"\' or "
+                + "c.user like \'"+keyWords[i]+"\' or "
+                + "c.description like \'"+keyWords[i]+"\' ) or";
+            }
+        }
+ 
+        Query query = this.em.createQuery(queryString);  
         return query.getResultList();
     }
     
