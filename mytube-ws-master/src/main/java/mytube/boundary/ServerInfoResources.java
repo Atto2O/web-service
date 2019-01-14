@@ -79,23 +79,10 @@ public class ServerInfoResources {
         return list.build();
     }
     
-    /*@GET
-    @Path("/")
-    public JsonArray findByServerInfoId(@QueryParam("id") Long id) {
-        JsonArrayBuilder list = Json.createArrayBuilder();
-        List<ServerInfo> all = this.servers.findByServerInfoId(id);
-        all.stream()
-                .map(m -> m.toJson()
-                )
-                .forEach(list::add);
-        return list.build();
-    }*/
-
     @POST
     @Path("new")
     public Long save(@Valid ServerInfo serverInfo) {
         return this.servers.create(serverInfo);
-        //return Response.ok().build();
     }
     
     @PUT
@@ -105,11 +92,9 @@ public class ServerInfoResources {
             this.servers.modify(serverInfo);
             return 1;
         }else{
-        //this.servers.remove(serverInfo.getId());
          this.servers.modify(serverInfo);
          return 0;
         }
-        //return Response.ok().build();
     }
     
     @DELETE

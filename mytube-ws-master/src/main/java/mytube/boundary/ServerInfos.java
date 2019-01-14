@@ -38,9 +38,6 @@ public class ServerInfos {
     }
     
     public void modify(ServerInfo serverInfo) {
-        //this.em.refresh(serverInfo);
-        //em.flush();
-        //return serverInfo.getId();
         this.em.merge(serverInfo);
     }
 

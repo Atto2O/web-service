@@ -41,11 +41,6 @@ public class Users {
     
     public void modify(User user){
         this.em.merge(user);
-        /*
-        System.out.println("\nHola dins del modify avans del update\n");
-        Query query = this.em.createQuery("update User u set u.name = 'pometa' where u.id = :id");//.executeUpdate();;//.refresh(user);
-        query.setParameter("id", user.getId());
-        query.executeUpdate();*/
     }
     public void remove(Long id) {
         User user = findById(id);

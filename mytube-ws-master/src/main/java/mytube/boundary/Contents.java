@@ -73,9 +73,6 @@ public class Contents {
     }
 
     public void modify(Content content) {
-        //this.em.refresh(serverInfo);
-        //em.flush();
-        //return serverInfo.getId();
         this.em.merge(content);
     }
     

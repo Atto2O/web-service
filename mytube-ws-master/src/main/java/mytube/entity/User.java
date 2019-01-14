@@ -86,21 +86,12 @@ public class User {
         }
         
         JsonArray arr = plnArrBld.build();
-        // the array got created, add it to the json as a child element
         jsonBuilder.add("id", this.id);
         jsonBuilder.add("name", this.name);
         jsonBuilder.add("password", this.password);
         jsonBuilder.add("subscriptions", arr);
         
         return jsonBuilder.build();
-        
-        
-       /*/ return Json.createObjectBuilder()
-                .add("id", this.id)
-                .add("name", this.name)
-                .add("password", this.password)
-                .add("subscriptions", arr)
-                )
-                .build();*/
+
     }
 }

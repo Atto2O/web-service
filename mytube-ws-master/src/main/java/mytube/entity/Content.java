@@ -132,7 +132,6 @@ public class Content {
         }
         
         JsonArray arr = plnArrBld.build();
-        // the array got created, add it to the json as a child element
         jsonBuilder.add("id", this.id);
         jsonBuilder.add("fileName", this.fileName);
         jsonBuilder.add("serverID", this.serverID);
@@ -142,15 +141,6 @@ public class Content {
         jsonBuilder.add("tags", arr);
         return jsonBuilder.build();
         
-        /*return Json.createObjectBuilder()
-                .add("id", this.id)
-                .add("fileName", this.fileName)
-                .add("serverID", this.serverID)
-                .add("user", this.user)
-                .add("description", this.description)
-                .add("state", this.state)
-                .add("tags", String.valueOf(this.tags)
-                )
-                .build();*/
+     
     }
 }
